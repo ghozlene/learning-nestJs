@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query, Req, Res } from '@nestjs/common';
+import { query } from 'express';
 import { TodoEntity } from './entity/todo.entity'; './entity/todo.entity';
 
 
@@ -13,10 +14,28 @@ export class TodoController {
         this.todos = [];
     }
     @Get('')
-    getTodos() {
+    getTodos(
+        @Query() queryParams
+    ) {
 
+        console.log(queryParams);
         return this.todos;
     }
+    @Get('/:id')
+
+    getTodoById(
+
+        @Param('id') id
+    ) {
+
+        const todo = this.todos.find(t => t.id == id);
+        if (todo)
+            return todo;
+
+        throw new NotFoundException('todo not here');
+
+    }
+
 
     @Post('')
     postTodos(
