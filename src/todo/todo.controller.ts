@@ -54,14 +54,31 @@ export class TodoController {
     }
 
     @Delete('/:id')
-    deleteTodo() {
-        console.log('delete single  todo ');
-        return "delete todo";
+    deleteTodo(
+        @Param('id') id
+    ) {
+        const index = this.todos.findIndex(todo => todo.id == id);
+        if (index >= 0) {
+            this.todos.splice(index, 1);
+        } else {
+            throw new NotFoundException('element doesn\'t existe');
+        }
+        return {
+            count: 1,
+            message: 'element doesn\'t existe'
+        };
+
     }
 
     @Put('/:id')
-    updateTodo() {
-        console.log('update single  todo ');
-        return "update todo";
+    updateTodo(
+        @Param('id') id,
+        @Body() newtodo: Partial<TodoEntity>
+    ) {
+        const todo = this.getTodoById(id);
+        todo.description = newtodo.description ? newtodo.description : todo.description;
+        todo.name = newtodo.name ? newtodo.name : todo.name;
+
+        return todo;
     }
 }
