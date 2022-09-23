@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query, Req, Res } from '@nestjs/common';
 import { query } from 'express';
+import { AddTodoDto } from './dto/add-todo-dto';
+import { getAllTodoDto } from './dto/get-allTodo-dto';
 import { TodoEntity } from './entity/todo.entity'; './entity/todo.entity';
 
 
@@ -15,7 +17,7 @@ export class TodoController {
     }
     @Get('')
     getTodos(
-        @Query() queryParams
+        @Query() queryParams: getAllTodoDto
     ) {
 
         console.log(queryParams);
@@ -39,17 +41,22 @@ export class TodoController {
 
     @Post('')
     postTodos(
-        @Body() newTodo: TodoEntity,
+        @Body() newTodo: AddTodoDto,
 
     ) {
+
+        const todo = new TodoEntity();
+        const { name, description } = newTodo;
+        todo.name = name;
+        todo.description = description;
         if (this.todos.length) {
-            newTodo.id = this.todos[this.todos.length - 1].id + 1;
+            todo.id = this.todos[this.todos.length - 1].id + 1;
         } else {
-            newTodo.id = 1;
+            todo.id = 1;
         }
-        this.todos.push(newTodo);
-        console.log(newTodo);
-        return newTodo;
+        this.todos.push(todo);
+        console.log(todo);
+        return todo;
 
     }
 
@@ -73,7 +80,7 @@ export class TodoController {
     @Put('/:id')
     updateTodo(
         @Param('id') id,
-        @Body() newtodo: Partial<TodoEntity>
+        @Body() newtodo: Partial<AddTodoDto>
     ) {
         const todo = this.getTodoById(id);
         todo.description = newtodo.description ? newtodo.description : todo.description;
