@@ -1,12 +1,18 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Put, Req, Res } from '@nestjs/common';
+
+
+
 
 @Controller('todo')
 export class TodoController {
 
     @Get('')
-    getTodos() {
-        console.log('get  todo list');
-        return "this is your list ";
+    getTodos(
+        @Req() request,
+        @Res() response,
+    ) {
+        console.log(response.status(200).json({ message: 'message1' }));
+        //console.log(request.headers.host);
     }
 
     @Post('')
