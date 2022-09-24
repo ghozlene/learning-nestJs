@@ -2,18 +2,21 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Que
 import { query } from 'express';
 import { AddTodoDto } from './dto/add-todo-dto';
 import { getAllTodoDto } from './dto/get-allTodo-dto';
-import { TodoEntity } from './entity/todo.entity'; './entity/todo.entity';
+import { TodoEntity } from './entity/todo.entity'; import { TodoService } from './todo.service';
+'./entity/todo.entity';
 
 
 
 @Controller('todo')
 export class TodoController {
 
-    todos: TodoEntity[];
 
 
-    constructor() {
-        this.todos = [];
+
+    constructor(
+        private todoService: TodoService
+    ) {
+
     }
     @Get('')
     getTodos(
@@ -21,7 +24,7 @@ export class TodoController {
     ) {
 
         console.log(queryParams);
-        return this.todos;
+        return this.todoService.getTodo();
     }
     @Get('/:id')
 
