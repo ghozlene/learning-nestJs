@@ -31,13 +31,9 @@ export class TodoController {
     getTodoById(
 
         @Param('id') id
-    ) {
+    ): TodoEntity {
 
-        const todo = this.todos.find(t => t.id == id);
-        if (todo)
-            return todo;
-
-        throw new NotFoundException('todo not here');
+        return this.todoService.getTodoId(id);
 
     }
 
@@ -47,19 +43,8 @@ export class TodoController {
         @Body() newTodo: AddTodoDto,
 
     ) {
+        return this.todoService.addTodo(newTodo);
 
-        const todo = new TodoEntity();
-        const { name, description } = newTodo;
-        todo.name = name;
-        todo.description = description;
-        if (this.todos.length) {
-            todo.id = this.todos[this.todos.length - 1].id + 1;
-        } else {
-            todo.id = 1;
-        }
-        this.todos.push(todo);
-        console.log(todo);
-        return todo;
 
     }
 
@@ -67,17 +52,8 @@ export class TodoController {
     deleteTodo(
         @Param('id') id
     ) {
-        const index = this.todos.findIndex(todo => todo.id == id);
-        if (index >= 0) {
-            this.todos.splice(index, 1);
-        } else {
-            throw new NotFoundException('element doesn\'t existe');
-        }
-        return {
-            count: 1,
-            message: 'element doesn\'t existe'
-        };
 
+        return this.todoService.deleteTodo(id);
     }
 
     @Put('/:id')
@@ -85,10 +61,7 @@ export class TodoController {
         @Param('id') id,
         @Body() newtodo: Partial<AddTodoDto>
     ) {
-        const todo = this.getTodoById(id);
-        todo.description = newtodo.description ? newtodo.description : todo.description;
-        todo.name = newtodo.name ? newtodo.name : todo.name;
+        return this.todoService.updateTodo(id, newtodo);
 
-        return todo;
     }
 }
