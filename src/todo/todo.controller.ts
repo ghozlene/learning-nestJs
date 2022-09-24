@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, ParseIntPipe, Post, Put, Query, Req, Res } from '@nestjs/common';
 import { query } from 'express';
 import { AddTodoDto } from './dto/add-todo-dto';
 import { getAllTodoDto } from './dto/get-allTodo-dto';
@@ -50,15 +50,15 @@ export class TodoController {
 
     @Delete('/:id')
     deleteTodo(
-        @Param('id') id
+        @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id
     ) {
-
+        console.log(typeof (id));
         return this.todoService.deleteTodo(id);
     }
 
     @Put('/:id')
     updateTodo(
-        @Param('id') id,
+        @Param('id', ParseIntPipe) id,
         @Body() newtodo: Partial<AddTodoDto>
     ) {
         return this.todoService.updateTodo(id, newtodo);
