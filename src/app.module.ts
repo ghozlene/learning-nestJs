@@ -13,9 +13,10 @@ import { TodoModule } from './todo/todo.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FirsMiddleware, logger).forRoutes({
+    consumer.apply(FirsMiddleware).forRoutes({
       path: '/todo', method: RequestMethod.GET,
-    }, { path: '/todo/*', method: RequestMethod.DELETE });
+    }, { path: '/todo/*', method: RequestMethod.DELETE })
+      .apply(logger).forRoutes('');
 
   }
 }
