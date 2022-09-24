@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Request, Response } from 'express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { FirstInterceptor } from './interceptors/first.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
       next();
     });
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
+  app.useGlobalInterceptors(new FirstInterceptor());
   await app.listen(3000);
 }
 bootstrap();

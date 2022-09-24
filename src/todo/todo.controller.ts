@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, ParseIntPipe, Post, Put, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, ParseIntPipe, Post, Put, Query, Req, Res, UseInterceptors } from '@nestjs/common';
 import { query } from 'express';
+import { FirstInterceptor } from 'src/interceptors/first.interceptor';
 import { UpperAndFusionPipe } from 'src/pipes/upper-and-fusion.pipe';
 import { AddTodoDto } from './dto/add-todo-dto';
 import { getAllTodoDto } from './dto/get-allTodo-dto';
@@ -8,6 +9,7 @@ import { TodoEntity } from './entity/todo.entity'; import { TodoService } from '
 
 
 
+@UseInterceptors(FirstInterceptor)
 @Controller('todo')
 export class TodoController {
 
