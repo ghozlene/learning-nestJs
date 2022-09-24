@@ -24,7 +24,7 @@ export class TodoController {
         @Query() queryParams: getAllTodoDto
     ) {
 
-        console.log(queryParams instanceof (getAllTodoDto));
+
         return this.todoService.getTodo();
     }
     @Get('/:id')
@@ -44,7 +44,7 @@ export class TodoController {
         @Body() newTodo: AddTodoDto,
 
     ) {
-        console.log(newTodo);
+
         return this.todoService.addTodo(newTodo);
 
 
