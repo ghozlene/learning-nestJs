@@ -12,6 +12,17 @@ export class PersonService {
         @InjectRepository(PersonEntity)
         private personRepository: Repository<PersonEntity>) {
     }
+
+    async findById(id: number) {
+        const personRemoved = await this.personRepository.findOneBy({ id });
+
+        if (!personRemoved) {
+
+            throw new NotFoundException('Person doesn\'t exsit ');
+        }
+        return personRemoved;
+    }
+
     async getPersons(): Promise<PersonEntity[]> {
         return await this.personRepository.find();
     }
@@ -39,21 +50,27 @@ export class PersonService {
     }
 
     async removePerson(id: number) {
-        const personRemoved = await this.personRepository.findOneBy({ id });
-
-        if (personRemoved)
-            //Delete the person
-            return this.personRepository.remove(personRemoved);
-
-        throw new NotFoundException('Person doesn\'t exsit ');
+        const personRemoved = await this.findById(id);
+        //Delete the person
+        return await this.personRepository.remove(personRemoved);
     }
 
+    async softDeletePerson(id: number) {
+
+        //Delete the person
+        return await this.personRepository.softDelete(id);
+
+    }
     //!second method with delete
     async deletePerson(id: number) {
 
         return await this.personRepository.delete([4, 5, 6, 7]);
 
 
+    }
+    async restorePerson(id: number) {
+
+        return this.personRepository.restore(id);
     }
 
 }

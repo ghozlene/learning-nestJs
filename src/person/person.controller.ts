@@ -40,11 +40,18 @@ export class PersonController {
     }
 
     @Delete(':id')
-    async removePerson(
+    async deletePerson(
         @Param('id', ParseIntPipe) id: number
     ) {
-        return await this.personService.deletePerson(id);
+        return await this.personService.softDeletePerson(id);
 
     }
+
+    @Get('restore/:id')
+    async recoverPerson(
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        return this.personService.restorePerson(id);
+    };
 
 }
