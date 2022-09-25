@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { TimeStamp } from 'src/generics/timeStamp';
+import { Entity, Column, PrimaryGeneratedColumn, } from 'typeorm';
 
 @Entity('person')
-export class PersonEntity {
+export class PersonEntity extends TimeStamp {
     @PrimaryGeneratedColumn()
     id: number;
     @Column({
@@ -22,4 +23,8 @@ export class PersonEntity {
     job: string;
     @Column()
     path: string;
+
+
 }
+
+
