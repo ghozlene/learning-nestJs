@@ -8,12 +8,15 @@ import * as bcrypt from 'bcrypt';
 import { UpdatePersonDTO } from './personDTO/updatePerson.DTO';
 import * as colors from 'colors';
 import { LoginCreadentialsDTO } from './personDTO/login-Credentialis.DTO';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class PersonService {
 
     constructor(
         @InjectRepository(PersonEntity)
-        private personRepository: Repository<PersonEntity>) {
+        private personRepository: Repository<PersonEntity>,
+        private jwtService: JwtService
+    ) {
     }
 
     async findById(id: number) {
@@ -109,28 +112,34 @@ export class PersonService {
 
     }
 
-    async login(credentials: LoginCreadentialsDTO): Promise<Partial<PersonEntity>> {
+    async login(credentials: LoginCreadentialsDTO) {
         //getting the email and password
         const { email, password } = credentials;
+
         //getting the user
         const user = await this.personRepository.createQueryBuilder('person')
             .where("person.email = :email",
                 { email })
             .getOne();
-        console.log(user);
+
         //check if user exist
         if (!user) {
             throw new NotFoundException('user not found... check credenials');
         }
         //compare password with the password on the DB
         const hashedPassword = await bcrypt.hash(password, user.salt);
-        console.log(hashedPassword);
-        if (hashedPassword === user.password) {
 
-            return {
+        if (hashedPassword === user.password) {
+            const payload = {
                 email: user.email,
                 role: user.role
             };
+            const jwt = await this.jwtService.sign(payload);
+
+            return {
+                "access_token": jwt
+            };
+
         } else {
             throw new NotFoundException('user not found... check credenials');
         }

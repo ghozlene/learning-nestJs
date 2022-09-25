@@ -81,7 +81,7 @@ export class PersonController {
     @Post('login')
     async login(
         @Body() credentials: LoginCreadentialsDTO
-    ): Promise<Partial<PersonEntity>> {
+    ) {
 
         return await this.personService.login(credentials);
     }
