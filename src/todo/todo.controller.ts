@@ -17,7 +17,7 @@ export class TodoController {
 
 
     constructor(
-        private todoService: TodoService
+        private todoService: TodoService,
     ) {
 
     }
