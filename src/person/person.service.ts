@@ -38,4 +38,23 @@ export class PersonService {
         return this.personRepository.update(updateCriteria, personUpdate);
     }
 
+    async removePerson(id: number) {
+        const personRemoved = await this.personRepository.findOneBy({ id });
+
+        if (personRemoved)
+            //Delete the person
+            return this.personRepository.remove(personRemoved);
+
+        throw new NotFoundException('Person doesn\'t exsit ');
+    }
+
+    //!second method with delete
+    async deletePerson(id: number) {
+
+        return await this.personRepository.delete([4, 5, 6, 7]);
+
+
+    }
+
 }
+

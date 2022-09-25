@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
 import { PersonEntity } from './entities/person.entity';
 import { PersonService } from './person.service';
@@ -39,5 +39,12 @@ export class PersonController {
         return await this.personService.updatePersonV2(updateCriteria, updatePersonDTO);
     }
 
+    @Delete(':id')
+    async removePerson(
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        return await this.personService.deletePerson(id);
+
+    }
 
 }
