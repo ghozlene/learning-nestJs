@@ -6,6 +6,7 @@ import { logger } from './middlewares/logger.middleware';
 import { TodoModule } from './todo/todo.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PersonModule } from './person/person.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 @Module({
@@ -16,11 +17,12 @@ dotenv.config();
       port: parseInt(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      database: process.env.DB_USERNAME,
-      entities: [],
+      database: process.env.DATABASE_NAME,
+      entities: ["dist/**/*.entity{.ts,.js}*"],
       synchronize: true,
     }),
-    ConfigModule.forRoot({ isGlobal: true })
+    ConfigModule.forRoot({ isGlobal: true }),
+    PersonModule
   ],
   controllers: [AppController],
   providers: [AppService],
