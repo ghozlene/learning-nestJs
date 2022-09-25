@@ -4,16 +4,18 @@ import { PersonEntity } from './entities/person.entity';
 import { PersonService } from './person.service';
 import { AddPersonDTO } from './personDTO/addPerson-DTO';
 import { UpdatePersonDTO } from './personDTO/updatePerson.DTO';
+import { UserSubscribeDTO } from './personDTO/user-subscribe.DTO';
 
 @Controller('person')
 export class PersonController {
-    constructor(private personService: PersonService) {
+    constructor(private personService: PersonService,
+    ) {
 
     }
     @Get()
     async getAllPersons(): Promise<PersonEntity[]> {
         return await this.personService.getPersons();
-    }
+    };
 
     @Post()
     async addPerson(
@@ -67,4 +69,11 @@ export class PersonController {
         const { updateCriteria, updatePersonDTO } = updateObject;
         return await this.personService.updatePersonV2(updateCriteria, updatePersonDTO);
     };
+
+    @Post('register')
+    async register(
+        @Body() userData: UserSubscribeDTO
+    ) {
+        return await this.personService.register(userData);
+    }
 }

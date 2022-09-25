@@ -1,8 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PersonEntity } from './entities/person.entity';
 import { AddPersonDTO } from './personDTO/addPerson-DTO';
+import { UserSubscribeDTO } from './personDTO/user-subscribe.DTO';
+import * as bcrypt from 'bcrypt';
 import { UpdatePersonDTO } from './personDTO/updatePerson.DTO';
 import * as colors from 'colors';
 @Injectable()
@@ -87,6 +89,22 @@ export class PersonService {
 
         return queryBuilder.getRawMany();
 
+
+    }
+
+    async register(userData: UserSubscribeDTO): Promise<Partial<PersonEntity>> {
+        const user = this.personRepository.create({
+            ...userData
+        });
+        user.salt = await bcrypt.genSalt();
+        user.password = await bcrypt.hash(user.password, user.salt);
+        try {
+            await this.personRepository.save(user);
+        } catch (e) {
+            throw new ConflictException('check your password or email ', e);
+        }
+
+        return { id: user.id, email: user.email, password: user.password };
 
     }
 

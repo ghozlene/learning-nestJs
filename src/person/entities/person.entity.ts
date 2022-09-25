@@ -1,4 +1,5 @@
 
+import { IsOptional } from 'class-validator';
 import { UserRoleEnum } from 'src/enum/userRole.enum';
 import { TimeStamp } from 'src/generics/timeStamp';
 import { CarEntity } from 'src/user/entities/car.entity';
@@ -18,6 +19,14 @@ export class PersonEntity extends TimeStamp {
         length: 50,
     })
     firstName: string;
+    @IsOptional()
+    @Column({
+        name: 'username',
+        length: 50,
+    })
+    username: string;
+
+
     @Column()
     age: number;
     @Column()
@@ -30,11 +39,12 @@ export class PersonEntity extends TimeStamp {
     password: string;
     @Column()
     salt: string;
-
+    @Column()
+    email: string;
     @Column({
         type: 'enum',
         enum: UserRoleEnum,
-        default: UserRoleEnum.ADMIN
+        default: UserRoleEnum.USER
     })
     role: string;
 
