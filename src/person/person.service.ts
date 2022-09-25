@@ -7,6 +7,7 @@ import { UserSubscribeDTO } from './personDTO/user-subscribe.DTO';
 import * as bcrypt from 'bcrypt';
 import { UpdatePersonDTO } from './personDTO/updatePerson.DTO';
 import * as colors from 'colors';
+import { LoginCreadentialsDTO } from './personDTO/login-Credentialis.DTO';
 @Injectable()
 export class PersonService {
 
@@ -106,6 +107,33 @@ export class PersonService {
 
         return { id: user.id, email: user.email, password: user.password };
 
+    }
+
+    async login(credentials: LoginCreadentialsDTO): Promise<Partial<PersonEntity>> {
+        //getting the email and password
+        const { email, password } = credentials;
+        //getting the user
+        const user = await this.personRepository.createQueryBuilder('person')
+            .where("person.email = :email",
+                { email })
+            .getOne();
+        console.log(user);
+        //check if user exist
+        if (!user) {
+            throw new NotFoundException('user not found... check credenials');
+        }
+        //compare password with the password on the DB
+        const hashedPassword = await bcrypt.hash(password, user.salt);
+        console.log(hashedPassword);
+        if (hashedPassword === user.password) {
+
+            return {
+                email: user.email,
+                role: user.role
+            };
+        } else {
+            throw new NotFoundException('user not found... check credenials');
+        }
     }
 
 }

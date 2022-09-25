@@ -3,6 +3,7 @@ import { UpdateResult } from 'typeorm';
 import { PersonEntity } from './entities/person.entity';
 import { PersonService } from './person.service';
 import { AddPersonDTO } from './personDTO/addPerson-DTO';
+import { LoginCreadentialsDTO } from './personDTO/login-Credentialis.DTO';
 import { UpdatePersonDTO } from './personDTO/updatePerson.DTO';
 import { UserSubscribeDTO } from './personDTO/user-subscribe.DTO';
 
@@ -75,5 +76,13 @@ export class PersonController {
         @Body() userData: UserSubscribeDTO
     ) {
         return await this.personService.register(userData);
+    }
+
+    @Post('login')
+    async login(
+        @Body() credentials: LoginCreadentialsDTO
+    ): Promise<Partial<PersonEntity>> {
+
+        return await this.personService.login(credentials);
     }
 }
