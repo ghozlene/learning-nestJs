@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { PersonEntity } from './entities/person.entity';
 import { AddPersonDTO } from './personDTO/addPerson-DTO';
 import { UpdatePersonDTO } from './personDTO/updatePerson.DTO';
-
+import * as colors from 'colors';
 @Injectable()
 export class PersonService {
 
@@ -71,6 +71,23 @@ export class PersonService {
     async restorePerson(id: number) {
 
         return this.personRepository.restore(id);
+    }
+
+    async statPersonNumberByAge(maxAge: Number, minAge = 0) {
+        //creating a queryBuilder
+        const queryBuilder = this.personRepository.createQueryBuilder('person');
+        //searching the number of person by Age
+        await queryBuilder
+            .select("person.age,count(person.id) as Total_Persons")
+            .where('person.age > :minAge and person.age < :maxAge')
+            .setParameters({ minAge, maxAge })
+            .groupBy('person.age');
+
+        console.log(colors.yellow(queryBuilder.getSql()));
+
+        return queryBuilder.getRawMany();
+
+
     }
 
 }
