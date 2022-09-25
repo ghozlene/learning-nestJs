@@ -1,5 +1,6 @@
 import { TimeStamp } from 'src/generics/timeStamp';
-import { Entity, Column, PrimaryGeneratedColumn, } from 'typeorm';
+import { CarEntity } from 'src/user/entities/car.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, } from 'typeorm';
 
 @Entity('person')
 export class PersonEntity extends TimeStamp {
@@ -24,6 +25,15 @@ export class PersonEntity extends TimeStamp {
     @Column()
     path: string;
 
+    @OneToMany(
+        type => CarEntity,
+        (car) => car.persons, {
+
+        nullable: true,
+
+    }
+    )
+    car: CarEntity[];
 
 }
 

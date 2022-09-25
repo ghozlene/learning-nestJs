@@ -7,6 +7,7 @@ import { TodoModule } from './todo/todo.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModule } from './person/person.module';
+import { CarModule } from './user/car.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 @Module({
@@ -22,7 +23,8 @@ dotenv.config();
       synchronize: true,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
-    PersonModule
+    PersonModule,
+    CarModule,
   ],
   controllers: [AppController],
   providers: [AppService],
