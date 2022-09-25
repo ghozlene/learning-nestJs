@@ -1,6 +1,8 @@
+
+import { UserRoleEnum } from 'src/enum/userRole.enum';
 import { TimeStamp } from 'src/generics/timeStamp';
 import { CarEntity } from 'src/user/entities/car.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, } from 'typeorm';
 
 @Entity('person')
 export class PersonEntity extends TimeStamp {
@@ -24,15 +26,26 @@ export class PersonEntity extends TimeStamp {
     job: string;
     @Column()
     path: string;
+    @Column()
+    password: string;
+    @Column()
+    salt: string;
+
+    @Column({
+        type: 'enum',
+        enum: UserRoleEnum,
+        default: UserRoleEnum.ADMIN
+    })
+    role: string;
 
     @OneToMany(
         type => CarEntity,
         (car) => car.persons, {
 
         nullable: true,
-
     }
     )
+
     car: CarEntity[];
 
 }
