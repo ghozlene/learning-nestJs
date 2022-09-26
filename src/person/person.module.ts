@@ -6,6 +6,7 @@ import { PersonEntity } from './entities/person.entity';
 import { PersonController } from './person.controller';
 import { PersonService } from './person.service';
 import * as dotenv from 'dotenv';
+import { JwtStrategy } from './strategy/passportJwt.strategy';
 dotenv.config();
 @Module({
   imports: [
@@ -18,6 +19,6 @@ dotenv.config();
     })
   ],
   controllers: [PersonController],
-  providers: [PersonService,]
+  providers: [PersonService, JwtStrategy]
 })
 export class PersonModule { }

@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UpdateResult } from 'typeorm';
 import { PersonEntity } from './entities/person.entity';
 import { PersonService } from './person.service';
@@ -13,12 +14,15 @@ export class PersonController {
     ) {
 
     }
+
     @Get()
+
     async getAllPersons(): Promise<PersonEntity[]> {
         return await this.personService.getPersons();
     };
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     async addPerson(
         @Body() addPersonDTO: AddPersonDTO
     ): Promise<PersonEntity> {
@@ -48,6 +52,7 @@ export class PersonController {
     };
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     async deletePerson(
         @Param('id', ParseIntPipe) id: number
     ) {
@@ -55,6 +60,7 @@ export class PersonController {
 
     }
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     async updatePerson(
         @Param('id', ParseIntPipe) id: number,
         @Body() updatePersonDTO: UpdatePersonDTO
@@ -64,6 +70,7 @@ export class PersonController {
 
     //!Second way of updating
     @Patch()
+    @UseGuards(JwtAuthGuard)
     async updatePersonV2(
         @Body() updateObject,
     ): Promise<UpdateResult> {
